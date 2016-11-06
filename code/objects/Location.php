@@ -11,8 +11,6 @@
  * @property string $EmailAddress
  * @property bool $ShowInLocator
  * @property int $Import_ID
- * @property int $CategoryID
- * @method LocationCategory $Category
  */
 class Location extends DataObject implements PermissionProvider
 {
@@ -34,8 +32,8 @@ class Location extends DataObject implements PermissionProvider
     /**
      * @var array
      */
-    private static $has_one = array(
-        'Category' => 'LocationCategory',
+    private static $many_many = array(
+        'Categories' => 'LocationCategory',
     );
 
     /**
@@ -88,7 +86,6 @@ class Location extends DataObject implements PermissionProvider
         'Website',
         'Phone',
         'Email',
-        'Category.ID',
         'ShowInLocator',
         'Featured',
     );
@@ -105,10 +102,9 @@ class Location extends DataObject implements PermissionProvider
         'State',
         'Postcode',
         'Country',
-        'Category.Name',
         'ShowInLocator.NiceAsBoolean',
         'Featured.NiceAsBoolean',
-        'Coords',
+        'Coords'
     );
 
     /**
@@ -136,8 +132,6 @@ class Location extends DataObject implements PermissionProvider
         $labels['Postcode'] = 'Postal Code';
         $labels['ShowInLocator'] = 'Show';
         $labels['ShowInLocator.NiceAsBoolean'] = 'Show';
-        $labels['Category.Name'] = 'Category';
-        $labels['Category.ID'] = 'Category';
         $labels['Email'] = 'Email';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
         $labels['Coords'] = 'Coords';
@@ -161,8 +155,7 @@ class Location extends DataObject implements PermissionProvider
                     EmailField::create('Email', 'Email'),
                     TextField::create('Website')
                         ->setAttribute('placeholder', 'http://'),
-                    DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))
-                        ->setEmptyString('-- select --'),
+                    PickerField::create("Categories", "Categories", $this->Categories()),
                     CheckboxField::create('ShowInLocator', 'Show in results')
                         ->setDescription('Location will be included in results list'),
                     CheckboxField::create('Featured')

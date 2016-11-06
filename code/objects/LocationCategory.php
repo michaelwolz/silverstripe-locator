@@ -20,15 +20,9 @@ class LocationCategory extends DataObject
     /**
      * @var array
      */
-    private static $has_many = array(
-        'Locations' => 'Location',
-    );
-
-    /**
-     * @var array
-     */
     private static $belogs_many_many = array(
         'Locators' => 'Locator',
+        'Locations' => 'Location',
     );
 
     /**

@@ -12,7 +12,7 @@ class DistanceDataExtension extends DataExtension
             $address = $this->owner->updateAddressValue($address);
         }
         if ($address) { // on frontend
-            $coords = GoogleGeocoding::address_to_point($address);
+            $coords = GoogleGeocoding::address_to_point($address, 'de');
 
             $Lat = $coords['lat'];
             $Lng = $coords['lng'];

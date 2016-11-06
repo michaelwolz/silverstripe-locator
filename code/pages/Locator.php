@@ -336,13 +336,7 @@ class Locator_Controller extends Page_Controller
         $filter = $this->config()->get('base_filter');
 
         if ($request->getVar('CategoryID')) {
-            $filter['CategoryID'] = $request->getVar('CategoryID');
-        } else {
-            if ($this->getPageCategories()->exists()) {
-                foreach ($this->getPageCategories() as $category) {
-                    $filter['CategoryID'][] = $category->ID;
-                }
-            }
+            $filter['Categories.ID'] = $request->getVar('CategoryID');
         }
 
         $this->extend('updateLocatorFilter', $filter, $request);

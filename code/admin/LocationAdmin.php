@@ -48,7 +48,6 @@ class LocationAdmin extends ModelAdmin
                 'Phone' => 'Phone',
                 'Fax' => 'Fax',
                 'Email' => 'Email',
-                'Category.Name' => 'Category',
                 'ShowInLocator' => 'ShowInLocator',
                 'Featured' => 'Featured',
                 'Lat' => 'Lat',
