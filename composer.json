@@ -23,7 +23,7 @@
     "silverstripe/framework": "^3.4",
     "silverstripe/cms": "^3.4",
     "silverstripe-australia/addressable": "^1.1",
-    "muskie9/data-to-arraylist": "dev-master",
+    "muskie9/data-to-arraylist": "1.0.0",
     "briceburg/silverstripe-pickerfield": "^0.9.0"
   },
   "suggest": {
