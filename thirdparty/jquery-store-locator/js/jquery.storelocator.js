@@ -126,7 +126,7 @@ $.fn.storeLocator = function(options) {
     markers = [];
     $(document).off('click.'+prefix, '#' + settings.listDiv + ' li');
   }
-  
+
   //Add modal window divs if set
   if(settings.modalWindow === true){
     $this.wrap('<div id="' + settings.overlayDiv + '"><div id="' + settings.modalWindowDiv + '"><div id="' + settings.modalContentDiv + '">');
@@ -308,7 +308,7 @@ $.fn.storeLocator = function(options) {
         /*
         //trying to prevent js from filtering when Address field changes
       $(document).on('keyup.'+prefix, function(e){
-        if (e.keyCode === 13 && $('#' + settings.inputID).is(':focus')) { 
+        if (e.keyCode === 13 && $('#' + settings.inputID).is(':focus')) {
           get_form_values(e);
         }
       });
@@ -509,9 +509,11 @@ $.fn.storeLocator = function(options) {
 
           //Distance sorting function
           function sort_numerically(locationsarray){
-            locationsarray.sort(function(a, b){
-              return ((a['distance'] < b['distance']) ? -1 : ((a['distance'] > b['distance']) ? 1 : 0));
-            });
+              if (locationsarray[0]['distance']) {
+                  locationsarray.sort(function (a, b) {
+                      return ((a['distance'] < b['distance']) ? -1 : ((a['distance'] > b['distance']) ? 1 : 0));
+                  });
+              }
           }
 
           //Sort the multi-dimensional array by distance
@@ -550,9 +552,9 @@ $.fn.storeLocator = function(options) {
               alert(settings.distanceErrorAlert + settings.distanceAlert + " " + distUnit);
             }
           }
-          
+
           //Create the map with jQuery
-          $(function(){ 
+          $(function(){
 
              var key, value, locationData = {};
 
@@ -574,20 +576,20 @@ $.fn.storeLocator = function(options) {
                 create_location_variables(currentMarker.get("id"));
 
                 var distLength;
-                if(locationData['distance'] <= 1){ 
+                if(locationData['distance'] <= 1){
                   if(settings.lengthUnit === "km"){
                     distLength = settings.kilometerLang;
                   }
                   else{
-                    distLength = settings.mileLang; 
+                    distLength = settings.mileLang;
                   }
                 }
-                else{ 
+                else{
                   if(settings.lengthUnit === "km"){
                     distLength = settings.kilometersLang;
                   }
                   else{
-                    distLength = settings.milesLang; 
+                    distLength = settings.milesLang;
                   }
                 }
 
@@ -600,7 +602,7 @@ $.fn.storeLocator = function(options) {
                 else{
                   var indicator = String.fromCharCode("A".charCodeAt(0) + markerId);
                 }
-                
+
                 //Define location data
                 var locations = {
                   location: [$.extend(locationData, {
@@ -646,7 +648,7 @@ $.fn.storeLocator = function(options) {
                 });
                 //Close modal when escape key is pressed
                 $(document).on('keyup.'+prefix, function(e){
-                  if (e.keyCode === 27) { 
+                  if (e.keyCode === 27) {
                     modalClose();
                   }
                 });
@@ -666,7 +668,7 @@ $.fn.storeLocator = function(options) {
                   mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
               }
-              
+
               var map = new google.maps.Map(document.getElementById(settings.mapDiv),myOptions);
               $this.data('map', map);
 
@@ -683,7 +685,7 @@ $.fn.storeLocator = function(options) {
 
               //Add origin marker if the setting is set
               if(settings.originMarker === true && settings.fullMapStart === false){
-                var originPoint = new google.maps.LatLng(orig_lat, orig_lng);  
+                var originPoint = new google.maps.LatLng(orig_lat, orig_lng);
                 var marker = new google.maps.Marker({
                     position: originPoint,
                     map: map,
@@ -691,11 +693,11 @@ $.fn.storeLocator = function(options) {
                     draggable: false
                   });
               }
-              
+
               //Add markers and infowindows loop
-              for(var y = 0; y <= storenum; y++) { 
+              for(var y = 0; y <= storenum; y++) {
                 var letter = String.fromCharCode("A".charCodeAt(0) + y);
-                var point = new google.maps.LatLng(locationset[y]['lat'], locationset[y]['lng']);             
+                var point = new google.maps.LatLng(locationset[y]['lat'], locationset[y]['lng']);
                 marker = createMarker(point, locationset[y]['name'], locationset[y]['address'], letter );
                 marker.set("id", y);
                 markers[y] = marker;
@@ -710,7 +712,7 @@ $.fn.storeLocator = function(options) {
               if((settings.fullMapStart === true && firstRun === true) || settings.zoomLevel === 0){
                 map.fitBounds(bounds);
               }
-               
+
                //Create the links that focus on the related marker
                $("#" + settings.listDiv + ' ul').empty();
                $(markers).each(function(x, marker){
@@ -753,7 +755,7 @@ $.fn.storeLocator = function(options) {
               //Add the list li background colors
               $("#" + settings.listDiv + " ul li:even").css('background', "#" + settings.listColor1);
               $("#" + settings.listDiv + " ul li:odd").css('background', "#" + settings.listColor2);
-               
+
               //Custom marker function - alphabetical
               function createMarker(point, name, address, letter){
                 //Set up pin icon with the Google Charts API for all of our markers
@@ -761,18 +763,18 @@ $.fn.storeLocator = function(options) {
                   new google.maps.Size(21, 34),
                   new google.maps.Point(0,0),
                   new google.maps.Point(10, 34));
-                
+
                 //Create the markers
                 if(settings.storeLimit === -1 || settings.storeLimit > 26){
                   var marker = new google.maps.Marker({
-                    position: point, 
+                    position: point,
                     map: map,
                     draggable: false
                   });
                 }
                 else{
                   var marker = new google.maps.Marker({
-                    position: point, 
+                    position: point,
                     map: map,
                     icon: pinImage,
                     draggable: false
@@ -784,7 +786,7 @@ $.fn.storeLocator = function(options) {
 
               //Infowindows
               function create_infowindow(marker, location){
-                
+
                 //Define the location data
                 var locations = define_location_data(marker);
 
@@ -817,7 +819,7 @@ $.fn.storeLocator = function(options) {
               }
 
           });
-        }   
+        }
       });
     });
   }
